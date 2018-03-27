@@ -1,18 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-function Cartoon(props){
-  return <h1>Hello, {props.name} on {props.show}</h1>;
-}
+class Inc extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {counter:0}
+  }
 
-function Show(){
-  return <div>
-            <Cartoon name='Pikachu' show='Pokemon' />
-            <Cartoon name='Jasmine' show='Orgy' />
-          </div>;
+  increment=(e)=>{
+    e.preventDefault();
+    this.setState({
+      counter: this.state.counter + 1
+    });
+  }
+
+  render(){
+    return <button href='http://google.com' onClick={this.increment}>Value is {this.state.counter}</button>
+  }
 }
 
 ReactDOM.render(
-  <Show/>,
+  <Inc/>,
   document.getElementById('root')
-);
+)
