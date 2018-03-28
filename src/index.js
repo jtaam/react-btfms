@@ -1,34 +1,53 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-class Formtest extends React.Component{
+class Calculator extends React.Component{
   constructor(props){
     super(props)
-    this.state = {value:'hentai'}
+    this.state = {scale:'c', temp:0}
   }
-  handleSubmit=(e)=>{
-    console.log(this.state.value)
-    e.preventDefault()
+  handleCelcius=(e)=>{
+    this.setState({scale:'c', temp:e.target.value})
   }
-  handleChange=(e)=>{
-    this.setState({
-      value: !this.state.value
-    })
+  handleFahrenheit=(e)=>{
+    this.setState({scale:'f', temp:e.target.value})
   }
   render(){
+    const temp = this.state.temp
+    const scale = this.state.scale
+    const celcius = scale === 'f'? convert(temp, toCelcius): temp;
+    const fahrenheit = scale === 'c'? convert(temp, toFarenheit): temp;
+    return(
+      <div>
+        <Inputs scalename='Celcius' value={celcius} func={this.handleCelcius} />
+        <Inputs scalename='Fahrenheit' value={fahrenheit} func={this.handleFahrenheit} />
+      </div>
+    )
+  }
+}
+
+function convert(temp,convertFunction){
+  return convertFunction(temp)
+}
+function toCelcius(fahrenheit){
+  return (fahrenheit - 32) * 5/9;
+}
+function toFarenheit(celcius){
+  return (celcius * 9/5 + 32)
+}
+
+class Inputs extends React.Component{
+  render(){
     return (
-      <form onSubmit={this.handleSubmit}>
-        <select value={this.state.value} onChange={this.handleChange}>
-          <option value="pikachu">Pikachu</option>
-          <option value="hentai">Hentai</option>
-        </select>
-        <input type="submit" value="Go Ahead"/>
-      </form>
-    );
+      <fieldset>
+        <legend>Scale {this.props.scalename}</legend>
+        <input value={this.props.value} onChange={this.props.func} />
+      </fieldset>
+    )
   }
 }
 
 ReactDOM.render(
-  <Formtest />,
+  <Calculator />,
   document.getElementById('root')
 )
